@@ -323,7 +323,9 @@ sub _parse_defs {
 
     debug(2, "parsing table defs");
     my $defs = join '', grep ! /^\s*(\#|--|SET|\/\*)/, @{$self->{_defs}};
-    $defs =~ s/`//sg;
+
+    #$defs =~ s/`//sg;
+    
     my @tables = split /(?=^\s*(?:create|alter|drop)\s+table\s+)/im, $defs;
     $self->{_tables} = [];
     for my $table (@tables) {

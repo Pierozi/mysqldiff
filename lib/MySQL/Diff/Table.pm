@@ -156,7 +156,8 @@ sub is_auto_inc     { my $self = shift; return $_[0] && $self->{auto_inc}{$_[0]}
 sub _parse {
     my $self = shift;
 
-    $self->{def} =~ s/`([^`]+)`/$1/gs;  # later versions quote names
+    #$self->{def} =~ s/`([^`]+)`/$1/gs;  # later versions quote names
+    
     $self->{def} =~ s/\n+/\n/;
     $self->{lines} = [ grep ! /^\s*$/, split /(?=^)/m, $self->{def} ];
     my @lines = @{$self->{lines}};
@@ -175,6 +176,8 @@ sub _parse {
         $_ = shift @lines;
         s/^\s*(.*?),?\s*$/$1/; # trim whitespace and trailing commas
         debug(4,"line: [$_]");
+
+
         if (/^PRIMARY\s+KEY\s+(.+)$/) {
             my $primary = $1;
             croak "two primary keys in table '$self->{name}': '$primary', '$self->{primary_key}'\n"
@@ -222,7 +225,7 @@ sub _parse {
             last;
         }
 
-        if (/^(\S+)\s*(.*)/) {
+        if (/^(`[^`]+`)\s*(.*)/) {
             my ($field, $fdef) = ($1, $2);
             croak "definition for field '$field' duplicated in table '$self->{name}'\n"
                 if $self->{fields}{$field};
