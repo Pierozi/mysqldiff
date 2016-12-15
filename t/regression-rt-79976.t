@@ -8,7 +8,7 @@ use Test::More tests => 4;
 use_ok('MySQL::Diff::Database');
 can_ok 'MySQL::Diff::Database', 'auth_args';
 
-my $out = `mysqldump test`;
+my $out = `mysqldump -u root -h 127.0.0.1 test`;
 SKIP: {
   skip q{`mysqldump test` failed.}, 2 if $? != 0;
   my $db = new_ok 'MySQL::Diff::Database' => [ db => 'test' ];
